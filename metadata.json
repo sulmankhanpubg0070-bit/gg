@@ -1,6 +1,6 @@
 {
   "name": "Sulman Khan Studio",
-  "description": "A pristine minimalist greeting screen.",
+  "description": "A pristine minimalist greeting screen & custom family tree.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
