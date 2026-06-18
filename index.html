@@ -7,123 +7,145 @@
   
   <!-- CSS & Typography Support -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;800&display=swap" rel="stylesheet">
+  <!-- Exquisite Font Pairing: Outfit for headers, Syne for high-concept displays -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
 
   <style>
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: #030303;
+      font-family: 'Outfit', sans-serif;
+      background-color: #050505;
       color: #FFFFFF;
       overflow: hidden;
     }
-    .text-huge-solid {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(3.5rem, 12vw, 12rem);
+    
+    .typo-hello {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(3.5rem, 14vw, 13rem);
+      line-height: 0.75;
+      letter-spacing: -0.07em;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 30%, #a3e635 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .typo-assalam {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.5rem, 11vw, 10.5rem);
       line-height: 0.8;
       letter-spacing: -0.06em;
-      font-weight: 900;
-      text-transform: uppercase;
-    }
-    .text-huge-stroke {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: clamp(2.5rem, 9vw, 9.5rem);
-      line-height: 0.85;
-      letter-spacing: -0.05em;
-      font-weight: 900;
+      font-weight: 800;
       text-transform: uppercase;
       -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
       color: transparent;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .text-huge-stroke:hover {
+
+    .typo-assalam:hover {
       -webkit-text-stroke: 1.5px rgba(163, 230, 53, 0.95);
-      filter: drop-shadow(0 0 20px rgba(163, 230, 53, 0.25));
+      filter: drop-shadow(0 0 30px rgba(163, 230, 53, 0.3));
     }
-    .grid-lines {
-      background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-      background-size: 80px 80px;
+
+    /* Grid lines */
+    .grid-bg {
+      background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
     }
-    .fade-in {
-      animation: fadeInEffect 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    /* Elegant Fade and Slide-Up Animation */
+    .hero-animate {
+      animation: heroEntrance 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
-    @keyframes fadeInEffect {
+
+    @keyframes heroEntrance {
       from {
         opacity: 0;
-        transform: translateY(24px);
+        transform: translateY(40px) scale(0.98);
+        filter: blur(10px);
       }
       to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
+        filter: blur(0);
       }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between relative selection:bg-white selection:text-black">
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-lime-400 selection:text-black">
 
-  <!-- Minimal Decorative Grid Background -->
-  <div class="absolute inset-0 grid-lines pointer-events-none opacity-40"></div>
+  <!-- Interactive Grid Background Overlay -->
+  <div class="absolute inset-0 grid-bg pointer-events-none opacity-50"></div>
   
-  <!-- Subtle Ambient Glow behind texts -->
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lime-500/10 rounded-full blur-[140px] pointer-events-none"></div>
-  <div class="absolute top-1/3 left-1/4 w-80 h-80 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+  <!-- Sleek Glowing Orbs -->
+  <div class="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-lime-500/10 rounded-full blur-[150px] pointer-events-none animate-pulse" style="animation-duration: 8s;"></div>
+  <div class="absolute bottom-1/4 right-1/3 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[180px] pointer-events-none"></div>
 
-  <!-- Design Margin Lines -->
-  <div class="absolute top-0 right-0 h-full w-[1px] bg-white/5 mr-16 sm:mr-32 pointer-events-none hidden md:block"></div>
-  <div class="absolute top-0 left-0 h-full w-[1px] bg-white/5 ml-16 sm:ml-32 pointer-events-none hidden md:block"></div>
+  <!-- Vertical Layout Dividers -->
+  <div class="absolute top-0 right-0 h-full w-[1px] bg-white/5 mr-16 sm:mr-40 pointer-events-none hidden md:block"></div>
+  <div class="absolute top-0 left-0 h-full w-[1px] bg-white/5 ml-16 sm:ml-40 pointer-events-none hidden md:block"></div>
 
-  <!-- Ultra-Minimal Premium Header -->
-  <header class="py-8 px-6 sm:px-16 flex justify-between items-center relative z-10">
+  <!-- Minimal Header -->
+  <header class="py-10 px-8 sm:px-16 flex justify-between items-center relative z-10">
     <div class="flex items-center gap-3">
-      <span class="text-lg font-black tracking-tighter text-white font-mono">
-        SULMAN<span class="text-lime-400">.KHAN</span>
-      </span>
-      <div class="h-4.5 w-[1px] bg-white/10 mx-1"></div>
-      <span class="text-[9px] uppercase tracking-widest text-[#666] font-mono">
-        minimal display v1.0
-      </span>
-    </div>
-    <div class="flex items-center gap-1.5 bg-[#a3e635]/15 px-3.5 py-1.5 rounded-full border border-[#a3e635]/20 shadow-[0_0_20px_rgba(163,230,53,0.1)]">
-      <div class="relative flex h-1.5 w-1.5">
-        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
-        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-lime-500"></span>
+      <div class="w-8 h-8 rounded-lg bg-lime-400 flex items-center justify-center text-black font-extrabold font-mono text-base">
+        S
       </div>
-      <span class="text-[9px] font-mono font-bold tracking-widest text-lime-400">INDEX.HTML ACTIVE</span>
+      <div>
+        <span class="text-base font-black tracking-tight text-white uppercase">
+          Sulman Khan <span class="text-lime-400">Studio</span>
+        </span>
+        <p class="text-[9px] uppercase tracking-widest text-slate-500 font-mono -mt-1">Creative Hub</p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-2 bg-neutral-900/80 px-4 py-2 rounded-full border border-white/5 backdrop-blur-sm shadow-xl">
+      <div class="w-2 h-2 rounded-full bg-lime-400 animate-ping"></div>
+      <span class="text-[9px] font-mono font-bold tracking-widest text-[#a3e635]">PREACTIVE STATE</span>
     </div>
   </header>
 
-  <!-- Central Giant Typography Layout / Clean Stage -->
-  <main class="flex-grow flex flex-col justify-center items-start px-6 sm:px-16 relative z-10 max-w-7xl w-full mx-auto select-none fade-in">
+  <!-- Luxury Typographic Canvas -->
+  <main class="flex-grow flex flex-col justify-center items-start px-8 sm:px-24 relative z-10 max-w-7xl w-full mx-auto hero-animate">
     
-    <!-- Giant Greeting Blocks -->
-    <div class="flex flex-col gap-1 sm:gap-2 leading-none w-full">
-      <h1 class="text-huge-solid text-white tracking-tighter cursor-default selection:bg-lime-400 selection:text-black">
+    <!-- Outer bracket aesthetic -->
+    <div class="font-mono text-[10px] text-lime-400 mb-6 uppercase tracking-widest flex items-center gap-2">
+      <span class="px-2 py-0.5 bg-lime-400/10 rounded">[ STAGE 01 ]</span>
+      <span>// CURATED MASTERPIECE</span>
+    </div>
+
+    <!-- Giant Typography display -->
+    <div class="flex flex-col gap-2 sm:gap-4 leading-none w-full">
+      <h1 class="typo-hello cursor-default">
         Hello
       </h1>
-      <h2 class="text-huge-stroke tracking-tight cursor-default selection:bg-white selection:text-black">
+      <h2 class="typo-assalam cursor-default">
         Assalam-o-Alaikum
       </h2>
     </div>
 
-    <!-- Small Design Accent Block -->
-    <div class="mt-12 flex items-center gap-3 opacity-30 hover:opacity-80 transition duration-300">
-      <div class="w-8 h-[1px] bg-white/50"></div>
-      <span class="text-[10px] uppercase tracking-widest font-mono text-slate-300">
-        Bespoke Minimal Layout for Sulman Khan
-      </span>
+    <!-- Modern Minimal Accent Line and Metadata -->
+    <div class="mt-16 flex items-center gap-4 group">
+      <div class="w-12 h-[1px] bg-lime-400 group-hover:w-20 transition-all duration-500"></div>
+      <p class="text-[10px] uppercase tracking-widest font-mono text-slate-400">
+        Bespoke Editorial Concept • Pure Zero-Dependency Architecture
+      </p>
     </div>
 
   </main>
 
-  <!-- Clean Footer Grid Minimal Info -->
-  <footer class="py-8 px-6 sm:px-16 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10 transition-all font-mono">
-    <div class="flex flex-col gap-0.5 text-center sm:text-left">
-      <span class="text-[9px] uppercase tracking-widest text-[#555] font-bold">Pure Code Signature</span>
-      <span class="text-[11px] text-slate-400">Zero dependencies. Directly deployed on GitHub Pages.</span>
+  <!-- Premium Minimal Footer -->
+  <footer class="py-10 px-8 sm:px-16 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-6 relative z-10 font-mono">
+    <div class="flex flex-col gap-1 text-center sm:text-left">
+      <span class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">DEPLOYMENT SPECIFICATION</span>
+      <span class="text-xs text-slate-400">Host directly on GitHub Pages. Flawless rendering guaranteed.</span>
     </div>
-    <div class="text-xs text-slate-500 flex items-center gap-1">
-      Made with <i data-lucide="heart" class="w-3.5 h-3.5 text-lime-400 fill-lime-400 inline"></i> for Sulman Khan Studio
+    <div class="text-xs text-slate-500 flex items-center gap-2 hover:text-white transition duration-200 cursor-pointer">
+      <span>Crafted with</span>
+      <i data-lucide="heart" class="w-4 h-4 text-lime-400 fill-lime-400 inline animate-bounce"></i>
+      <span>for Sulman Khan</span>
     </div>
   </footer>
 
