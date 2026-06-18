@@ -138,15 +138,96 @@
         text-shadow: 0 1px 4px rgba(0,0,0,0.2);
         box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       }
+
+      /* Premium CTA Button CSS */
+      .cta-button-container {
+        margin-top: 24px;
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+      .premium-cta-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: linear-gradient(135deg, #a3e635 0%, #22c55e 100%);
+        color: #0b1020 !important;
+        font-weight: 800;
+        font-size: 15px;
+        letter-spacing: -0.3px;
+        padding: 14px 28px;
+        border-radius: 99px;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(163, 230, 53, 0.4);
+        transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .premium-cta-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        transition: all 0.6s ease;
+      }
+      .premium-cta-btn:hover {
+        transform: translateY(-3px) scale(1.03);
+        box-shadow: 0 8px 30px rgba(163, 230, 53, 0.6);
+        letter-spacing: 0px;
+      }
+      .premium-cta-btn:hover::before {
+        left: 100%;
+      }
+      .premium-cta-btn i {
+        transition: transform 0.3s ease;
+      }
+      .premium-cta-btn:hover i {
+        transform: translateX(4px);
+      }
+
+      /* Secondary interactive button */
+      .premium-secondary-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: rgba(255, 255, 255, 0.05);
+        color: var(--text) !important;
+        font-weight: 700;
+        font-size: 15px;
+        padding: 14px 28px;
+        border-radius: 99px;
+        text-decoration: none;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        transition: all 0.3s ease;
+      }
+      .premium-secondary-btn:hover {
+        background: rgba(255, 255, 255, 0.12);
+        border-color: rgba(255, 255, 255, 0.25);
+        transform: translateY(-2px);
+      }
+      html[data-theme="light"] .premium-secondary-btn {
+        background: rgba(16, 24, 40, 0.03);
+        border-color: rgba(16, 24, 40, 0.08);
+      }
+      html[data-theme="light"] .premium-secondary-btn:hover {
+        background: rgba(16, 24, 40, 0.08);
+        border-color: rgba(16, 24, 40, 0.15);
+      }
     </style>
   </head>
   <body>
     <div class="header-shell">
       <header class="topbar">
-        <span class="header-title" style="display: flex; align-items: center; gap: 8px;">
-          <i data-lucide="info" style="width: 18px; height: 18px; color: var(--accent);"></i>
-          Hamza Khan Studio
-        </span>
+        <div class="header-title" style="display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: -0.5px;">
+          <div style="background: linear-gradient(135deg, rgba(163, 230, 53, 0.2) 0%, rgba(34, 197, 94, 0.2) 100%); border: 1px solid rgba(163, 230, 53, 0.3); padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(163, 230, 53, 0.15);">
+            <i data-lucide="git-fork" style="width: 18px; height: 18px; color: #a3e635; transform: rotate(180deg);"></i>
+          </div>
+          <span style="font-size: 20px; background: linear-gradient(135deg, #ffffff 50%, #a3e635 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: system-ui, -apple-system, sans-serif;">Family Tree</span>
+        </div>
       </header>
 
       <nav class="topnav" aria-label="Pages">
@@ -167,6 +248,16 @@
         <p style="margin: 0; color: var(--muted); font-size: 15.5px; max-width: 720px; margin: 0 auto; line-height: 1.7;">
           Yeh platform aapke khandaan (family) ke ba-barkat shajrah aur haseen yaadon ko ek nihayat hi khoobsurat, modern aur be-misaal digital shakal deta hai. Internet connection ya slow database server ki fiqar kiye baghair—yeh pure offline speed ke sath har waqt aapke isharon par chalta hai.
         </p>
+        <div class="cta-button-container">
+          <a href="./index.html" class="premium-cta-btn">
+            <i data-lucide="git-branch" style="width: 18px; height: 18px;"></i>
+            Shajrah Mubarak Dekhein
+          </a>
+          <a href="./contact.html" class="premium-secondary-btn">
+            <i data-lucide="phone" style="width: 18px; height: 18px;"></i>
+            Rabta Karein
+          </a>
+        </div>
       </section>
 
       <!-- Grid of outstanding features -->
