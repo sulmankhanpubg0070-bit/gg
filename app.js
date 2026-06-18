@@ -336,26 +336,32 @@ function draw() {
   applySearchHighlight();
 }
 
-searchInput.addEventListener("input", () => {
-  lastSearch = searchInput.value;
-  if (lastSearch.trim()) expandAll();
-  draw();
-});
+if (searchInput) {
+  searchInput.addEventListener("input", () => {
+    lastSearch = searchInput.value;
+    if (lastSearch.trim()) expandAll();
+    draw();
+  });
+}
 
-searchToggleBtn.addEventListener("click", () => {
-  const willShow = searchWrapEl.classList.contains("hidden");
-  searchWrapEl.classList.toggle("hidden");
-  if (willShow) {
-    searchInput.focus();
-    searchInput.select();
-  }
-});
+if (searchToggleBtn && searchWrapEl && searchInput) {
+  searchToggleBtn.addEventListener("click", () => {
+    const willShow = searchWrapEl.classList.contains("hidden");
+    searchWrapEl.classList.toggle("hidden");
+    if (willShow) {
+      searchInput.focus();
+      searchInput.select();
+    }
+  });
+}
 
-searchClearBtn.addEventListener("click", () => {
-  searchInput.value = "";
-  lastSearch = "";
-  draw();
-});
+if (searchClearBtn && searchInput) {
+  searchClearBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    lastSearch = "";
+    draw();
+  });
+}
 
 expandAllBtn.addEventListener("click", () => {
   expandAll();

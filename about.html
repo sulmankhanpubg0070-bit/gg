@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>About - Family Tree Creator</title>
+    <title>About - Hamza Khan Studio</title>
     <link rel="stylesheet" href="./styles.css" />
     <!-- Lucide Icons Support -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -13,13 +13,13 @@
         animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
       .animate-stagger-1 { animation-delay: 0.1s; opacity: 0; animation-fill-mode: forwards; }
-      .animate-stagger-2 { animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; }
-      .animate-stagger-3 { animation-delay: 0.3s; opacity: 0; animation-fill-mode: forwards; }
+      .animate-stagger-2 { animation-delay: 0.15s; opacity: 0; animation-fill-mode: forwards; }
+      .animate-stagger-3 { animation-delay: 0.2s; opacity: 0; animation-fill-mode: forwards; }
 
       @keyframes fadeUp {
         from {
           opacity: 0;
-          transform: translateY(24px);
+          transform: translateY(20px);
         }
         to {
           opacity: 1;
@@ -30,11 +30,11 @@
       /* About Page Specific Layout */
       .about-hero {
         text-align: center;
-        padding: 48px 24px;
-        background: var(--panel);
+        padding: 60px 30px;
+        background: linear-gradient(180deg, var(--panel) 0%, rgba(255, 255, 255, 0.02) 100%);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: var(--radius2);
-        margin-bottom: 24px;
+        margin-bottom: 28px;
         position: relative;
         overflow: hidden;
         box-shadow: var(--shadow);
@@ -45,12 +45,10 @@
       }
       .about-hero-glow {
         position: absolute;
-        width: 180px;
-        height: 180px;
-        background: var(--accent);
-        filter: blur(90px);
-        opacity: 0.16;
-        top: -40px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(124, 92, 255, 0.2) 0%, transparent 70%);
+        top: -100px;
         left: 50%;
         transform: translateX(-50%);
         pointer-events: none;
@@ -59,8 +57,8 @@
       .about-grid {
         display: grid;
         grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 16px;
-        margin-bottom: 24px;
+        gap: 20px;
+        margin-bottom: 28px;
       }
       @media (max-width: 768px) {
         .about-grid {
@@ -78,9 +76,9 @@
         gap: 16px;
       }
       .feat-card:hover {
-        transform: translateY(-3px);
+        transform: translateY(-4px);
         border-color: var(--accent);
-        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
         background: var(--panel2);
       }
       html[data-theme="light"] .feat-card {
@@ -92,113 +90,63 @@
       }
 
       .feat-icon {
-        width: 44px;
-        height: 44px;
+        width: 48px;
+        height: 48px;
         border-radius: 12px;
-        background: rgba(124, 92, 255, 0.1);
+        background: rgba(124, 92, 255, 0.15);
         color: var(--accent);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
+        transition: all 0.3s ease;
+      }
+      .feat-card:hover .feat-icon {
+        background: var(--accent);
+        color: #ffffff;
+        transform: scale(1.05) rotate(5deg);
       }
       .feat-content h3 {
-        margin: 0 0 6px 0;
+        margin: 0 0 8px 0;
         font-size: 16px;
         font-weight: 800;
-        letter-spacing: 0.1px;
+        letter-spacing: 0.2px;
+        color: var(--text);
       }
       .feat-content p {
         margin: 0;
-        font-size: 13px;
-        color: var(--muted);
-        line-height: 1.5;
-      }
-
-      .guide-section {
-        padding: 28px;
-        border-radius: var(--radius2);
-        background: var(--panel);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        margin-bottom: 24px;
-        box-shadow: var(--shadow);
-      }
-      html[data-theme="light"] .guide-section {
-        border-color: rgba(16, 24, 40, 0.08);
-      }
-
-      .guide-step {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-      }
-      .guide-step:last-child {
-        margin-bottom: 0;
-        padding-bottom: 0;
-        border-bottom: none;
-      }
-      html[data-theme="light"] .guide-step {
-        border-bottom-color: rgba(16, 24, 40, 0.06);
-      }
-
-      .step-num {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--accent), var(--accent2));
-        color: white;
-        font-weight: 800;
-        font-size: 14px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        box-shadow: 0 4px 12px rgba(124, 92, 255, 0.3);
-      }
-      .step-txt {
-        font-size: 14px;
-        line-height: 1.5;
-        flex-grow: 1;
-      }
-      .step-txt strong {
-        color: var(--text);
-        font-size: 15px;
-        display: block;
-        margin-bottom: 4px;
-      }
-      .step-txt p {
-        margin: 0;
-        color: var(--muted);
         font-size: 13.5px;
+        color: var(--muted);
+        line-height: 1.55;
       }
 
-      .code-block {
-        background: rgba(0, 0, 0, 0.28);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 14px;
-        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-        font-size: 12.5px;
-        color: #f1f5f9;
-        overflow-x: auto;
-        margin-top: 10px;
-        line-height: 1.5;
-        box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
-      }
-      html[data-theme="light"] .code-block {
-        background: rgba(16, 24, 40, 0.03);
-        border-color: rgba(16, 24, 40, 0.08);
-        color: #1a202c;
-        box-shadow: none;
+      /* Animated Badge styling */
+      .badge-premium {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, rgba(124, 92, 255, 0.15), rgba(34, 197, 94, 0.15));
+        border: 1px solid rgba(124, 92, 255, 0.25);
+        padding: 6px 14px;
+        border-radius: 99px;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #a3e635;
+        margin-bottom: 16px;
+        text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
       }
     </style>
   </head>
   <body>
     <div class="header-shell">
       <header class="topbar">
-        <div class="header-title">Family Tree</div>
+        <span class="header-title" style="display: flex; align-items: center; gap: 8px;">
+          <i data-lucide="info" style="width: 18px; height: 18px; color: var(--accent);"></i>
+          Hamza Khan Studio
+        </span>
       </header>
 
       <nav class="topnav" aria-label="Pages">
@@ -212,102 +160,53 @@
       <!-- Premium Hero Header -->
       <section class="about-hero animate-fade-up" id="aboutHero">
         <div class="about-hero-glow"></div>
-        <i data-lucide="info" style="width: 44px; height: 44px; color: var(--accent); margin: 0 auto 16px; display: block; filter: drop-shadow(0 4px 10px rgba(124, 92, 255, 0.2)); animate: pulse 2s infinite alternate;"></i>
-        <h1 style="margin: 0 0 10px 0; font-size: 28px; font-weight: 900; letter-spacing: -0.5px; background: linear-gradient(135deg, var(--text) 30%, var(--accent) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">About Family Tree Creator</h1>
-        <p style="margin: 0; color: var(--muted); font-size: 15px; max-width: 680px; margin: 0 auto; line-height: 1.6;">
-          Ye website aapki family ke haseen tree ko ek intehai simple, elegant aur modern tareeqay se display karti hai. Isko chalane ke liye internet ya database ki koi zaroorat nahi—yeh offline chalne wali ek nayaab website hai.
+        <div class="badge-premium">
+          <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i> Preserving Generations
+        </div>
+        <h1 style="margin: 0 0 12px 0; font-size: 32px; font-weight: 900; letter-spacing: -0.8px; background: linear-gradient(135deg, #ffffff 40%, #a3e635 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Hamza Khan Studio</h1>
+        <p style="margin: 0; color: var(--muted); font-size: 15.5px; max-width: 720px; margin: 0 auto; line-height: 1.7;">
+          Yeh platform aapke khandaan (family) ke ba-barkat shajrah aur haseen yaadon ko ek nihayat hi khoobsurat, modern aur be-misaal digital shakal deta hai. Internet connection ya slow database server ki fiqar kiye baghair—yeh pure offline speed ke sath har waqt aapke isharon par chalta hai.
         </p>
       </section>
 
       <!-- Grid of outstanding features -->
-      <h2 style="font-size: 18px; font-weight: 855; margin: 28px 0 14px; display: flex; align-items: center; gap: 8px;" class="animate-fade-up animate-stagger-1">
-        <i data-lucide="sparkles" style="width: 18px; height: 18px; color: var(--accent);"></i> Outstanding Features
+      <h2 style="font-size: 19px; font-weight: 855; margin: 32px 0 18px; display: flex; align-items: center; gap: 8px;" class="animate-fade-up animate-stagger-1">
+        <i data-lucide="award" style="width: 20px; height: 20px; color: var(--accent);"></i> Premium System Capabilities
       </h2>
       <div class="about-grid animate-fade-up animate-stagger-2">
         <div class="feat-card" id="featOffline">
-          <div class="feat-icon"><i data-lucide="wifi-off" style="width: 20px; height: 20px;"></i></div>
+          <div class="feat-icon"><i data-lucide="wifi-off" style="width: 22px; height: 22px;"></i></div>
           <div class="feat-content">
-            <h3>100% Offline Capability</h3>
-            <p>Aapko kisi internet connection, hosting ya backend server ki zaroorat nahi. Browser open karte hi yeh chalne lagti hai.</p>
+            <h3>Zero Dependency / Perfect Privacy</h3>
+            <p>Data direct aapki local devices par save aur process hota hai. Kisi server par load hone ka khatra nahi yaani aapki family security 100% mehfooz hai.</p>
           </div>
         </div>
         <div class="feat-card" id="featZoom">
-          <div class="feat-icon"><i data-lucide="maximize-2" style="width: 20px; height: 20px;"></i></div>
+          <div class="feat-icon"><i data-lucide="shrink" style="width: 22px; height: 22px;"></i></div>
           <div class="feat-content">
-            <h3>Smooth Interactive Zooming</h3>
-            <p>Apne multi-generational tree branches ko zoom out, zoom in, standard controls se control karein, aur fit visual zoom ka lutaf uthayein.</p>
+            <h3>Responsive Canvas Scalability</h3>
+            <p>Advanced scale vectors ke zariye tree structures ko bareeki se control karein. Badi se badi generations ko bhi zoom out karke ek hi screen par dekhein.</p>
           </div>
         </div>
         <div class="feat-card" id="featSearch">
-          <div class="feat-icon"><i data-lucide="search" style="width: 20px; height: 20px;"></i></div>
+          <div class="feat-icon"><i data-lucide="shield-check" style="width: 22px; height: 22px;"></i></div>
           <div class="feat-content">
-            <h3>Instant High-precision Search</h3>
-            <p>Naam type karte hi matches real-time me highlight ho jate hain aur tree automatic search term par focus hojata hai.</p>
+            <h3>Deep Index Rendering Engine</h3>
+            <p>Umeed se behtar speed! Naam ke kuch hi huroof type karne par platform direct un cards ko highlight karke complete background display karta hai.</p>
           </div>
         </div>
         <div class="feat-card" id="featDesign">
-          <div class="feat-icon"><i data-lucide="palette" style="width: 20px; height: 20px;"></i></div>
+          <div class="feat-icon"><i data-lucide="palette" style="width: 22px; height: 22px;"></i></div>
           <div class="feat-content">
-            <h3>Curated Premium Themes</h3>
-            <p>Umeed se behtar, high-contrast Dark aur light elements, glow grids jo premium responsive screen experience faraham karte hain.</p>
+            <h3>High-Contrast Aesthetics</h3>
+            <p>Dynamic Light aur Dark mode options jo eyes safety ke mutabiq design kiye gaye hain. Khoobsurat visual nodes are designed with extreme precision.</p>
           </div>
         </div>
       </div>
-
-      <!-- Editing / Customization Step by step guide -->
-      <section class="guide-section animate-fade-up animate-stagger-3" id="guideSection">
-        <h2 style="font-size: 18px; font-weight: 855; margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
-          <i data-lucide="sliders" style="width: 18px; height: 18px; color: var(--accent2);"></i> Family Tree Ko Edit Kaise Karein?
-        </h2>
-        
-        <div class="guide-step">
-          <div class="step-num">1</div>
-          <div class="step-txt">
-            <strong>Open the "app.js" File</strong>
-            <p>Code Editor me project folder ke andar maujood <code>app.js</code> file ko open karein. Yahan poora data standard JS object ki shakal me rakha hua hai.</p>
-          </div>
-        </div>
-
-        <div class="guide-step">
-          <div class="step-num">2</div>
-          <div class="step-txt">
-            <strong>Choose the Head Root Member</strong>
-            <p>Apne tree ke sabse bade bar-urg member (root person) ki ID chunien aur use file ke upar variable <code>ROOT_ID</code> par set karein:</p>
-            <div class="code-block">const ROOT_ID = "p1";</div>
-          </div>
-        </div>
-
-        <div class="guide-step">
-          <div class="step-num">3</div>
-          <div class="step-txt">
-            <strong>Write Down Family Members in PEOPLE</strong>
-            <p><code>PEOPLE</code> database list me apne family members ko is standard elegant format me update karein:</p>
-            <div class="code-block">
-p1: {
-  id: "p1",
-  name: "Muhammad Ali",   // Mukammal Name
-  gender: "M",           // "M" ya "F" (Male/Female)
-  birth: "1960",         // Paidaish ka saal
-  note: "Family Head",   // Extra characteristics / ouda
-  partnerId: "p2",       // Life partner ki ID
-  children: ["p3", "p4"] // Bachon ki dynamic matching IDs
-}
-            </div>
-          </div>
-        </div>
-
-        <div class="guide-step">
-          <div class="step-num">4</div>
-          <div class="step-txt">
-            <strong>Add Partner Relations</strong>
-            <p>Releshan ko correct rakhne ke liye visual partner entries dono tarf cross-sync rakhein. Maslan agar <code>p1</code> ka partner <code>p2</code> hai, to <code>p2</code> ka partner entry bhi <code>p1</code> lazmi hona chahiye, aur dono me children IDs array same define karein.</p>
-          </div>
-        </div>
-      </section>
     </main>
 
     <footer class="footer">
-      <span>Built with plain HTML/CSS/JS (no internet needed).</span>
+      <span>Designed with premium aesthetics by Hamza Khan. All rights reserved.</span>
     </footer>
 
     <script src="./site.js"></script>

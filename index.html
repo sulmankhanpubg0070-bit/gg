@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Family Tree</title>
+    <title>Hamza Khan Family Tree</title>
     <link rel="stylesheet" href="./styles.css" />
     <!-- Lucide Icons Support -->
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -11,7 +11,12 @@
   <body>
     <div class="header-shell">
       <header class="topbar">
-        <div class="header-title">Family Tree</div>
+        <div class="header-title" style="display: flex; align-items: center; gap: 10px; font-weight: 900; letter-spacing: -0.5px;">
+          <div style="background: linear-gradient(135deg, rgba(163, 230, 53, 0.2) 0%, rgba(34, 197, 94, 0.2) 100%); border: 1px solid rgba(163, 230, 53, 0.3); padding: 5px; border-radius: 8px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(163, 230, 53, 0.15);">
+            <i data-lucide="git-fork" style="width: 18px; height: 18px; color: #a3e635; transform: rotate(180deg);"></i>
+          </div>
+          <span style="font-size: 20px; background: linear-gradient(135deg, #ffffff 50%, #a3e635 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: system-ui, -apple-system, sans-serif;">Family Tree</span>
+        </div>
       </header>
 
       <nav class="topnav" aria-label="Pages">
@@ -22,9 +27,19 @@
     </div>
 
     <main class="container">
-      <section class="hint">
-        <div>
-          Data change karne ke liye `app.js` me `PEOPLE` aur `ROOT_ID` edit kar dein.
+      <!-- High-Level Prominent Search Section -->
+      <section class="search-hero" id="searchHero">
+        <div class="search-hero-glow"></div>
+        <h2>
+          <i data-lucide="search" style="width: 18px; height: 18px; color: var(--accent);"></i>
+          Quick Family Search
+        </h2>
+        <div class="search-box-container">
+          <i data-lucide="search" style="width: 20px; height: 20px;"></i>
+          <input id="searchInput" type="search" placeholder="Type a name to search and highlight members..." autocomplete="off" />
+          <button id="searchClearBtn" class="clear-btn" type="button" title="Clear Search">
+            <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+          </button>
         </div>
       </section>
 
@@ -34,10 +49,8 @@
     </main>
 
     <nav class="bottombar" aria-label="Menu">
-      <button id="searchToggleBtn" class="btn btn-ghost" type="button">Search</button>
-      <div id="searchWrap" class="search-wrap hidden" role="group" aria-label="Search input">
-        <input id="searchInput" type="search" placeholder="Name..." autocomplete="off" />
-        <button id="searchClearBtn" class="btn btn-ghost btn-xs" type="button">Clear</button>
+      <div class="flex items-center gap-2 text-xs text-lime-400 font-bold tracking-wider uppercase pl-2 font-mono">
+        <i data-lucide="git-fork" style="width: 14px; height: 14px;"></i> Active Tree View
       </div>
 
       <div class="spacer"></div>
@@ -69,7 +82,7 @@
     </div>
 
     <footer class="footer">
-      <span>Built with plain HTML/CSS/JS (no internet needed).</span>
+      <span>Designed with premium aesthetics by Hamza Khan. All rights reserved.</span>
     </footer>
 
     <script src="./site.js"></script>
