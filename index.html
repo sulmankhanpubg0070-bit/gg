@@ -1,69 +1,136 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hello, World!</title>
-    <!-- Live font loading for pristine typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS CDN for quick setup and responsive classes -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-              display: ['Space Grotesk', 'sans-serif'],
-            }
-          }
-        }
-      }
-    </script>
-    <style>
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(12px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .fade-in {
-        animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-    </style>
-  </head>
-  <body class="bg-slate-50 text-slate-900 min-h-screen flex items-center justify-center font-sans selection:bg-amber-150 selection:text-amber-950 overflow-hidden">
-    <!-- Clean Minimalist Background Container -->
-    <main class="w-full max-w-md p-8 md:p-12 text-center fade-in opacity-0">
-      
-      <!-- Visual Greeting Accent -->
-      <div class="mx-auto w-12 h-12 rounded-2xl bg-amber-100 flex items-center justify-center border border-amber-200/50 shadow-xs mb-6">
-        <span class="text-xl">👋</span>
-      </div>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sulman Khan Studio</title>
+  
+  <!-- CSS & Typography Support -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&family=Plus+Jakarta+Sans:wght@300;400;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-      <!-- Polished Display Greeting -->
-      <h1 class="text-4xl md:text-5xl font-bold font-display tracking-tight text-slate-900 mb-3">
-        Hello!
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #030303;
+      color: #FFFFFF;
+      overflow: hidden;
+    }
+    .text-huge-solid {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(3.5rem, 12vw, 12rem);
+      line-height: 0.8;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+    .text-huge-stroke {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.5rem, 9vw, 9.5rem);
+      line-height: 0.85;
+      letter-spacing: -0.05em;
+      font-weight: 900;
+      text-transform: uppercase;
+      -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
+      color: transparent;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .text-huge-stroke:hover {
+      -webkit-text-stroke: 1.5px rgba(163, 230, 53, 0.95);
+      filter: drop-shadow(0 0 20px rgba(163, 230, 53, 0.25));
+    }
+    .grid-lines {
+      background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+    }
+    .fade-in {
+      animation: fadeInEffect 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes fadeInEffect {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-white selection:text-black">
+
+  <!-- Minimal Decorative Grid Background -->
+  <div class="absolute inset-0 grid-lines pointer-events-none opacity-40"></div>
+  
+  <!-- Subtle Ambient Glow behind texts -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-lime-500/10 rounded-full blur-[140px] pointer-events-none"></div>
+  <div class="absolute top-1/3 left-1/4 w-80 h-80 bg-emerald-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+  <!-- Design Margin Lines -->
+  <div class="absolute top-0 right-0 h-full w-[1px] bg-white/5 mr-16 sm:mr-32 pointer-events-none hidden md:block"></div>
+  <div class="absolute top-0 left-0 h-full w-[1px] bg-white/5 ml-16 sm:ml-32 pointer-events-none hidden md:block"></div>
+
+  <!-- Ultra-Minimal Premium Header -->
+  <header class="py-8 px-6 sm:px-16 flex justify-between items-center relative z-10">
+    <div class="flex items-center gap-3">
+      <span class="text-lg font-black tracking-tighter text-white font-mono">
+        SULMAN<span class="text-lime-400">.KHAN</span>
+      </span>
+      <div class="h-4.5 w-[1px] bg-white/10 mx-1"></div>
+      <span class="text-[9px] uppercase tracking-widest text-[#666] font-mono">
+        minimal display v1.0
+      </span>
+    </div>
+    <div class="flex items-center gap-1.5 bg-[#a3e635]/15 px-3.5 py-1.5 rounded-full border border-[#a3e635]/20 shadow-[0_0_20px_rgba(163,230,53,0.1)]">
+      <div class="relative flex h-1.5 w-1.5">
+        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-lime-400 opacity-75"></span>
+        <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-lime-500"></span>
+      </div>
+      <span class="text-[9px] font-mono font-bold tracking-widest text-lime-400">INDEX.HTML ACTIVE</span>
+    </div>
+  </header>
+
+  <!-- Central Giant Typography Layout / Clean Stage -->
+  <main class="flex-grow flex flex-col justify-center items-start px-6 sm:px-16 relative z-10 max-w-7xl w-full mx-auto select-none fade-in">
+    
+    <!-- Giant Greeting Blocks -->
+    <div class="flex flex-col gap-1 sm:gap-2 leading-none w-full">
+      <h1 class="text-huge-solid text-white tracking-tighter cursor-default selection:bg-lime-400 selection:text-black">
+        Hello
       </h1>
-      
-      <p class="text-xs md:text-sm text-slate-500 font-normal leading-relaxed max-w-xs mx-auto">
-        Your self-contained static page is perfectly built, lightweight, and ready to deploy instantly anywhere.
-      </p>
+      <h2 class="text-huge-stroke tracking-tight cursor-default selection:bg-white selection:text-black">
+        Assalam-o-Alaikum
+      </h2>
+    </div>
 
-      <!-- Humble separator -->
-      <div class="mt-8 pt-6 border-t border-slate-200/60 flex items-center justify-center gap-1.5">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-500"></span>
-        <span class="text-5xs font-black font-mono text-slate-400 uppercase tracking-widest">
-          ONLINE & READY
-        </span>
-      </div>
+    <!-- Small Design Accent Block -->
+    <div class="mt-12 flex items-center gap-3 opacity-30 hover:opacity-80 transition duration-300">
+      <div class="w-8 h-[1px] bg-white/50"></div>
+      <span class="text-[10px] uppercase tracking-widest font-mono text-slate-300">
+        Bespoke Minimal Layout for Sulman Khan
+      </span>
+    </div>
 
-    </main>
-  </body>
+  </main>
+
+  <!-- Clean Footer Grid Minimal Info -->
+  <footer class="py-8 px-6 sm:px-16 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10 transition-all font-mono">
+    <div class="flex flex-col gap-0.5 text-center sm:text-left">
+      <span class="text-[9px] uppercase tracking-widest text-[#555] font-bold">Pure Code Signature</span>
+      <span class="text-[11px] text-slate-400">Zero dependencies. Directly deployed on GitHub Pages.</span>
+    </div>
+    <div class="text-xs text-slate-500 flex items-center gap-1">
+      Made with <i data-lucide="heart" class="w-3.5 h-3.5 text-lime-400 fill-lime-400 inline"></i> for Sulman Khan Studio
+    </div>
+  </footer>
+
+  <!-- State Engine & Javascript Logic -->
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+  </script>
+</body>
 </html>
