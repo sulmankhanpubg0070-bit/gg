@@ -1,6 +1,0 @@
-{
-  "name": "Family Tree Builder",
-  "description": "An elegant, highly interactive and responsive Family Tree creator and visualizer with search, detailed relationship editors, and bilingual support.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
