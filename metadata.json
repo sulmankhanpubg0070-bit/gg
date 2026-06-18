@@ -1,6 +1,0 @@
-{
-  "name": "Welcome and Hello",
-  "description": "A clean sample website with Welcome and Hello headings.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
