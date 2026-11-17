@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,7 +28,10 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Get Flutter Dependencies
+      - name: Ensure Android Project Config
+        run: flutter create . --platforms=android --org com.rozanarate
+
+      - name: Get Dependencies
         run: flutter pub get
 
       - name: Build APK (Release)
