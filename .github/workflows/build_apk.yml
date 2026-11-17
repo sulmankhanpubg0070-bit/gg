@@ -55,9 +55,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.0
-          name: "Rozana Rate v1.0.0"
-          body: "روزانہ ریٹ کی تازہ ترین ریلیز براہ راست ڈاؤنلوڈ کریں۔ (Rozana Rate Latest Release)"
+          tag_name: v1.0.1
+          name: "Rozana Rate v1.0.1"
+          body: "نیا اپڈیٹ v1.0.1: نیچے 3 فکسڈ نیویگیشن بٹنز (ریٹس، کیلکولیٹر، اپڈیٹس) شامل کر دیے گئے ہیں۔"
           files: RozanaRate.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

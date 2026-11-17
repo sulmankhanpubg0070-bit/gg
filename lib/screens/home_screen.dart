@@ -15,11 +15,13 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  int _currentTabIndex = 0;
   String _selectedCity = SampleData.availableCities.first;
   RateCategory? _selectedCategory; // null = All
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   late List<RateItem> _allItems;
+  RateItem? _calculatorSelectedItem;
   bool _isRefreshing = false;
 
   @override
@@ -72,10 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('آپ کی ایپ پہلے سے بالکل اپڈیٹ ہے! (App is up to date v1.0.0)'),
-          backgroundColor: Color(0xFF0D7A57),
-          duration: Duration(seconds: 3),
+        SnackBar(
+          content: Text('آپ کی ایپ پہلے سے بالکل اپڈیٹ ہے! (v${UpdateService.currentVersion})'),
+          backgroundColor: const Color(0xFF0D7A57),
+          duration: const Duration(seconds: 3),
         ),
       );
     }
@@ -114,11 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final todayFormatted = DateFormat('EEEE, d MMMM yyyy').format(DateTime.now());
 
-    final petrolItem = _allItems.firstWhere((i) => i.id == 'fuel1', orElse: () => _allItems.first);
-    final dollarItem = _allItems.firstWhere((i) => i.id == 'cur1', orElse: () => _allItems.first);
-    final goldItem = _allItems.firstWhere((i) => i.id == 'gold1', orElse: () => _allItems.first);
-    final chickenItem = _allItems.firstWhere((i) => i.id == 'm2', orElse: () => _allItems.first);
-
     return Scaffold(
       appBar: AppBar(
         title: Column(
@@ -147,13 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
-          // Manual Check Update Button
-          IconButton(
-            tooltip: 'اپڈیٹ چیک کریں (Check for Update)',
-            icon: const Icon(Icons.system_update_rounded),
-            onPressed: _checkUpdateManually,
-          ),
-
           // City selector button
           PopupMenuButton<String>(
             tooltip: 'شہر منتخب کریں (Select City)',
@@ -196,216 +186,380 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: _refreshData,
-        child: CustomScrollView(
-          slivers: [
-            // Top Quick Highlights Cards (Petrol, Dollar, Gold, Chicken)
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 105,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                  children: [
-                    _buildSummaryMiniCard(
-                      context,
-                      title: 'پٹرول (Petrol)',
-                      price: 'Rs ${petrolItem.currentPrice}',
-                      unit: petrolItem.unit,
-                      icon: Icons.local_gas_station_rounded,
-                      color: Colors.amber.shade800,
-                    ),
-                    _buildSummaryMiniCard(
-                      context,
-                      title: 'ڈالر (USD)',
-                      price: 'Rs ${dollarItem.currentPrice}',
-                      unit: dollarItem.unit,
-                      icon: Icons.currency_exchange_rounded,
-                      color: Colors.blue.shade700,
-                    ),
-                    _buildSummaryMiniCard(
-                      context,
-                      title: 'سونا 24K (Gold)',
-                      price: 'Rs ${goldItem.currentPrice.toStringAsFixed(0)}',
-                      unit: 'فی تولہ',
-                      icon: Icons.diamond_rounded,
-                      color: Colors.orange.shade700,
-                    ),
-                    _buildSummaryMiniCard(
-                      context,
-                      title: 'مرغی گوشت (Chicken)',
-                      price: 'Rs ${chickenItem.currentPrice}',
-                      unit: chickenItem.unit,
-                      icon: Icons.set_meal_rounded,
-                      color: Colors.teal.shade700,
-                    ),
-                  ],
-                ),
+
+      // IndexedStack preserves state across bottom navigation tabs
+      body: IndexedStack(
+        index: _currentTabIndex,
+        children: [
+          // Tab 0: Daily Rates Explorer
+          _buildRatesTab(context),
+
+          // Tab 1: Fixed Calculator Tab
+          CalculatorScreen(
+            items: _allItems,
+            initialItem: _calculatorSelectedItem ?? _allItems.first,
+            isTab: true,
+          ),
+
+          // Tab 2: Updates & Settings Tab
+          _buildUpdatesTab(context),
+        ],
+      ),
+
+      // Fixed 3-button Bottom Navigation Bar
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentTabIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentTabIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.trending_up_rounded),
+            selectedIcon: Icon(Icons.trending_up_rounded, color: Color(0xFF0D7A57)),
+            label: 'ریٹس (Rates)',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.calculate_outlined),
+            selectedIcon: Icon(Icons.calculate_rounded, color: Color(0xFF0D7A57)),
+            label: 'کیلکولیٹر (Calc)',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.system_update_outlined),
+            selectedIcon: Icon(Icons.system_update_rounded, color: Color(0xFF0D7A57)),
+            label: 'اپڈیٹس (Updates)',
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- TAB 0: RATES VIEW ---
+  Widget _buildRatesTab(BuildContext context) {
+    final theme = Theme.of(context);
+    final petrolItem = _allItems.firstWhere((i) => i.id == 'fuel1', orElse: () => _allItems.first);
+    final dollarItem = _allItems.firstWhere((i) => i.id == 'cur1', orElse: () => _allItems.first);
+    final goldItem = _allItems.firstWhere((i) => i.id == 'gold1', orElse: () => _allItems.first);
+    final chickenItem = _allItems.firstWhere((i) => i.id == 'm2', orElse: () => _allItems.first);
+
+    return RefreshIndicator(
+      onRefresh: _refreshData,
+      child: CustomScrollView(
+        slivers: [
+          // Highlights Mini Cards
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 105,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                children: [
+                  _buildSummaryMiniCard(
+                    context,
+                    title: 'پٹرول (Petrol)',
+                    price: 'Rs ${petrolItem.currentPrice}',
+                    unit: petrolItem.unit,
+                    icon: Icons.local_gas_station_rounded,
+                    color: Colors.amber.shade800,
+                  ),
+                  _buildSummaryMiniCard(
+                    context,
+                    title: 'ڈالر (USD)',
+                    price: 'Rs ${dollarItem.currentPrice}',
+                    unit: dollarItem.unit,
+                    icon: Icons.currency_exchange_rounded,
+                    color: Colors.blue.shade700,
+                  ),
+                  _buildSummaryMiniCard(
+                    context,
+                    title: 'سونا 24K (Gold)',
+                    price: 'Rs ${goldItem.currentPrice.toStringAsFixed(0)}',
+                    unit: 'فی تولہ',
+                    icon: Icons.diamond_rounded,
+                    color: Colors.orange.shade700,
+                  ),
+                  _buildSummaryMiniCard(
+                    context,
+                    title: 'مرغی گوشت (Chicken)',
+                    price: 'Rs ${chickenItem.currentPrice}',
+                    unit: chickenItem.unit,
+                    icon: Icons.set_meal_rounded,
+                    color: Colors.teal.shade700,
+                  ),
+                ],
               ),
             ),
+          ),
 
-            // Search Bar
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'تلاش کریں (ٹماٹر، پٹرول، سونا، چینی...)',
-                    prefixIcon: const Icon(Icons.search_rounded),
-                    suffixIcon: _searchQuery.isNotEmpty
-                        ? IconButton(
-                            icon: const Icon(Icons.clear_rounded),
-                            onPressed: () {
-                              _searchController.clear();
-                              setState(() => _searchQuery = '');
-                            },
-                          )
-                        : null,
-                    filled: true,
-                    fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.4),
-                    contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(14),
-                      borderSide: BorderSide.none,
+          // Search Bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              child: TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: 'تلاش کریں (ٹماٹر، پٹرول، سونا، چینی...)',
+                  prefixIcon: const Icon(Icons.search_rounded),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear_rounded),
+                          onPressed: () {
+                            _searchController.clear();
+                            setState(() => _searchQuery = '');
+                          },
+                        )
+                      : null,
+                  filled: true,
+                  fillColor: theme.colorScheme.surfaceVariant.withOpacity(0.4),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(14),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+                onChanged: (val) {
+                  setState(() => _searchQuery = val);
+                },
+              ),
+            ),
+          ),
+
+          // Category Chips
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: 48,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: FilterChip(
+                      selected: _selectedCategory == null,
+                      label: const Text('سب ریٹس (All)'),
+                      onSelected: (_) {
+                        setState(() => _selectedCategory = null);
+                      },
                     ),
                   ),
-                  onChanged: (val) {
-                    setState(() => _searchQuery = val);
-                  },
-                ),
-              ),
-            ),
-
-            // Category Horizontal Tabs
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 48,
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  children: [
-                    Padding(
+                  ...RateCategory.values.map((cat) {
+                    final isSelected = _selectedCategory == cat;
+                    return Padding(
                       padding: const EdgeInsets.only(right: 8),
                       child: FilterChip(
-                        selected: _selectedCategory == null,
-                        label: const Text('سب ریٹس (All)'),
+                        selected: isSelected,
+                        avatar: Icon(cat.icon, size: 16),
+                        label: Text('${cat.labelUrdu} (${cat.labelEn})'),
                         onSelected: (_) {
-                          setState(() => _selectedCategory = null);
+                          setState(() {
+                            _selectedCategory = isSelected ? null : cat;
+                          });
                         },
                       ),
-                    ),
-                    ...RateCategory.values.map((cat) {
-                      final isSelected = _selectedCategory == cat;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: FilterChip(
-                          selected: isSelected,
-                          avatar: Icon(cat.icon, size: 16),
-                          label: Text('${cat.labelUrdu} (${cat.labelEn})'),
-                          onSelected: (_) {
-                            setState(() {
-                              _selectedCategory = isSelected ? null : cat;
-                            });
-                          },
-                        ),
-                      );
-                    }),
-                  ],
-                ),
+                    );
+                  }),
+                ],
               ),
             ),
+          ),
 
-            // Item count & status bar
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          // Item count & status bar
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(20, 14, 20, 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '${_filteredItems.length} اشیاء کے سرکاری ریٹ',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.bold,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  Text(
+                    'کلک کر کے حساب کریں',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: theme.colorScheme.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // List of Rate Cards
+          if (_filteredItems.isEmpty)
+            const SliverFillRemaining(
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    Icon(Icons.search_off_rounded, size: 54, color: Colors.grey),
+                    SizedBox(height: 12),
                     Text(
-                      '${_filteredItems.length} اشیاء کے سرکاری ریٹ',
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    Text(
-                      'کلک کر کے حساب کریں',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      'کوئی چیز نہیں ملی (No items found)',
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                   ],
                 ),
               ),
+            )
+          else
+            SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final item = _filteredItems[index];
+                  return RateCard(
+                    item: item,
+                    onCalculate: () {
+                      setState(() {
+                        _calculatorSelectedItem = item;
+                        _currentTabIndex = 1; // switch to Calculator tab!
+                      });
+                    },
+                  );
+                },
+                childCount: _filteredItems.length,
+              ),
             ),
 
-            // List of Rate Cards
-            if (_filteredItems.isEmpty)
-              const SliverFillRemaining(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(Icons.search_off_rounded, size: 54, color: Colors.grey),
-                      SizedBox(height: 12),
-                      Text(
-                        'کوئی چیز نہیں ملی (No items found)',
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
-                      ),
-                    ],
+          const SliverToBoxAdapter(
+            child: SizedBox(height: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // --- TAB 2: UPDATES & SETTINGS VIEW ---
+  Widget _buildUpdatesTab(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // App Logo and Version Card
+          Container(
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(24),
+              border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(0.5)),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.04),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              children: [
+                Container(
+                  width: 72,
+                  height: 72,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0D7A57).withOpacity(0.12),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(Icons.storefront_rounded, size: 38, color: Color(0xFF0D7A57)),
+                ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Rozana Rate (روزانہ ریٹ)',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 4),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceVariant,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    'ورژن (Version): v${UpdateService.currentVersion}',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
                   ),
                 ),
-              )
-            else
-              SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) {
-                    final item = _filteredItems[index];
-                    return RateCard(
-                      item: item,
-                      onCalculate: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CalculatorScreen(
-                              items: _allItems,
-                              initialItem: item,
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  childCount: _filteredItems.length,
-                ),
-              ),
+                const SizedBox(height: 20),
 
-            const SliverToBoxAdapter(
-              child: SizedBox(height: 80),
+                // Check for updates button
+                FilledButton.icon(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: const Color(0xFF0D7A57),
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  ),
+                  icon: const Icon(Icons.sync_rounded),
+                  label: const Text(
+                    'ابھی اپڈیٹ چیک کریں (Check for Update)',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  onPressed: _checkUpdateManually,
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          const SizedBox(height: 20),
+
+          // Features List Card
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(0.4)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'ایپ کی خصوصیات (Features):',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                ),
+                const SizedBox(height: 12),
+                _buildFeatureRow('🚀 In-App OTA Auto-Update سسٹم فعال ہے'),
+                _buildFeatureRow('🥦 روزانہ تازہ ترین منڈی اور اوگرا ریٹس'),
+                _buildFeatureRow('🧮 کُل قیمت معلوم کرنے کے لیے ان بلٹ کیلکولیٹر'),
+                _buildFeatureRow('📍 پاکستان کے تمام بڑے شہروں کی سپورٹ'),
+              ],
+            ),
+          ),
+          const SizedBox(height: 20),
+
+          // Footer note
+          Center(
+            child: Text(
+              'تیار کردہ: Rozana Rate Team • تمام حقوق محفوظ ہیں',
+              style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+            ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        icon: const Icon(Icons.calculate_rounded),
-        label: const Text('کیلکولیٹر (Calculator)'),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => CalculatorScreen(
-                items: _allItems,
-                initialItem: _filteredItems.isNotEmpty ? _filteredItems.first : _allItems.first,
-              ),
+    );
+  }
+
+  Widget _buildFeatureRow(String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          const Icon(Icons.check_circle_rounded, size: 18, color: Color(0xFF0D7A57)),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              text,
+              style: const TextStyle(fontSize: 13),
             ),
-          );
-        },
+          ),
+        ],
       ),
     );
   }
