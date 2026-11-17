@@ -3,6 +3,8 @@ import 'package:intl/intl.dart';
 import '../models/rate_item.dart';
 import '../data/sample_data.dart';
 import '../widgets/rate_card.dart';
+import '../widgets/update_dialog.dart';
+import '../services/update_service.dart';
 import 'calculator_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +26,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadItems();
+    // Auto-check for OTA updates silently in the background
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkUpdateSilently();
+    });
   }
 
   @override
@@ -34,6 +40,45 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadItems() {
     _allItems = SampleData.getItems(_selectedCity);
+  }
+
+  Future<void> _checkUpdateSilently() async {
+    final updateInfo = await UpdateService.checkForUpdate();
+    if (updateInfo != null && mounted) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => UpdateDialog(updateInfo: updateInfo),
+      );
+    }
+  }
+
+  Future<void> _checkUpdateManually() async {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('اپڈیٹ چیک کی جا رہی ہے... (Checking for updates...)'),
+        duration: Duration(seconds: 1),
+      ),
+    );
+
+    final updateInfo = await UpdateService.checkForUpdate();
+    if (!mounted) return;
+
+    if (updateInfo != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => UpdateDialog(updateInfo: updateInfo),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('آپ کی ایپ پہلے سے بالکل اپڈیٹ ہے! (App is up to date v1.0.0)'),
+          backgroundColor: Color(0xFF0D7A57),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   Future<void> _refreshData() async {
@@ -69,7 +114,6 @@ class _HomeScreenState extends State<HomeScreen> {
     final theme = Theme.of(context);
     final todayFormatted = DateFormat('EEEE, d MMMM yyyy').format(DateTime.now());
 
-    // Highlight key summary items
     final petrolItem = _allItems.firstWhere((i) => i.id == 'fuel1', orElse: () => _allItems.first);
     final dollarItem = _allItems.firstWhere((i) => i.id == 'cur1', orElse: () => _allItems.first);
     final goldItem = _allItems.firstWhere((i) => i.id == 'gold1', orElse: () => _allItems.first);
@@ -103,6 +147,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          // Manual Check Update Button
+          IconButton(
+            tooltip: 'اپڈیٹ چیک کریں (Check for Update)',
+            icon: const Icon(Icons.system_update_rounded),
+            onPressed: _checkUpdateManually,
+          ),
+
           // City selector button
           PopupMenuButton<String>(
             tooltip: 'شہر منتخب کریں (Select City)',

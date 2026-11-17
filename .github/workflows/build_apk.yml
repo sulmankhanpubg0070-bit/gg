@@ -7,9 +7,12 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
-    name: Build Android Release APK
+    name: Build Android Release APK & Release
     runs-on: ubuntu-latest
 
     steps:
@@ -39,8 +42,22 @@ jobs:
       - name: Build APK (Release)
         run: flutter build apk --release
 
+      - name: Prepare APK for Release
+        run: cp build/app/outputs/flutter-apk/app-release.apk RozanaRate.apk
+
       - name: Upload APK as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: RozanaRate-APK-Release
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: RozanaRate.apk
+
+      - name: Publish GitHub Release (Direct APK Link)
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0
+          name: "Rozana Rate v1.0.0"
+          body: "روزانہ ریٹ کی تازہ ترین ریلیز براہ راست ڈاؤنلوڈ کریں۔ (Rozana Rate Latest Release)"
+          files: RozanaRate.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
