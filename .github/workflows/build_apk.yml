@@ -55,9 +55,9 @@ jobs:
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.1
-          name: "Rozana Rate v1.0.1"
-          body: "نیا اپڈیٹ v1.0.1: نیچے 3 فکسڈ نیویگیشن بٹنز (ریٹس، کیلکولیٹر، اپڈیٹس) شامل کر دیے گئے ہیں۔"
+          tag_name: v1.0.2
+          name: "Rozana Rate v1.0.2"
+          body: "نیا اپڈیٹ v1.0.2: واٹس ایپ پر 1 کلک میں ریٹس شیئرنگ اور ہر آئٹم کا پچھلے 7 دنوں کا قیمت کا گراف شامل کر دیا گیا ہے۔"
           files: RozanaRate.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

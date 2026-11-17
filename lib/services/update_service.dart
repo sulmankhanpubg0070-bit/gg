@@ -20,7 +20,7 @@ class UpdateInfo {
 
 class UpdateService {
   // Current app version installed
-  static const String currentVersion = '1.0.1';
+  static const String currentVersion = '1.0.2';
 
   // GitHub repository details
   static const String githubRepo = 'sulmankhanpubg0070-bit/gg';
@@ -54,7 +54,6 @@ class UpdateService {
         }
       }
 
-      // If no APK found in assets, fallback to generic latest release direct download
       if (downloadUrl.isEmpty) {
         downloadUrl = 'https://github.com/$githubRepo/releases/latest/download/RozanaRate.apk';
       }
@@ -71,7 +70,6 @@ class UpdateService {
 
       return null;
     } catch (_) {
-      // Offline or network error
       return null;
     }
   }

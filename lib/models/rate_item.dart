@@ -79,6 +79,7 @@ class RateItem {
   final String unit;
   final String grade;
   final String city;
+  final List<double> history7Days;
 
   const RateItem({
     required this.id,
@@ -90,6 +91,7 @@ class RateItem {
     required this.unit,
     this.grade = 'درجہ اول (Grade A)',
     this.city = 'Lahore',
+    this.history7Days = const [],
   });
 
   double get priceDiff => currentPrice - previousPrice;
@@ -100,5 +102,15 @@ class RateItem {
   double get changePercentage {
     if (previousPrice == 0) return 0.0;
     return ((currentPrice - previousPrice) / previousPrice) * 100;
+  }
+
+  double get highestIn7Days {
+    if (history7Days.isEmpty) return currentPrice;
+    return history7Days.reduce((a, b) => a > b ? a : b);
+  }
+
+  double get lowestIn7Days {
+    if (history7Days.isEmpty) return currentPrice;
+    return history7Days.reduce((a, b) => a < b ? a : b);
   }
 }

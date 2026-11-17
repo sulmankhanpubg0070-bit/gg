@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/rate_item.dart';
+import 'price_history_sheet.dart';
 
 class RateCard extends StatelessWidget {
   final RateItem item;
@@ -19,14 +20,14 @@ class RateCard extends StatelessWidget {
 
     Color badgeColor = Colors.grey.shade600;
     IconData badgeIcon = Icons.remove_rounded;
-    String badgeText = 'مستحکم (Stable)';
+    String badgeText = 'مستحکم';
 
     if (isUp) {
-      badgeColor = Colors.red.shade700; // in grocery, price up is red/expensive
+      badgeColor = Colors.red.shade700;
       badgeIcon = Icons.arrow_upward_rounded;
       badgeText = '+Rs ${item.priceDiff.abs().toStringAsFixed(1)}';
     } else if (isDown) {
-      badgeColor = Colors.green.shade700; // price down is green/relief
+      badgeColor = Colors.green.shade700;
       badgeIcon = Icons.arrow_downward_rounded;
       badgeText = '-Rs ${item.priceDiff.abs().toStringAsFixed(1)}';
     }
@@ -35,13 +36,13 @@ class RateCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         border: Border.all(
           color: theme.colorScheme.outlineVariant.withOpacity(0.5),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withOpacity(0.03),
             blurRadius: 8,
             offset: const Offset(0, 3),
           ),
@@ -49,10 +50,13 @@ class RateCard extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(18),
         child: InkWell(
-          borderRadius: BorderRadius.circular(16),
-          onTap: onCalculate,
+          borderRadius: BorderRadius.circular(18),
+          onTap: () {
+            // Tap card opens 7-Day Trend Chart & WhatsApp Share!
+            PriceHistorySheet.show(context, item);
+          },
           child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: Row(
@@ -64,7 +68,7 @@ class RateCard extends StatelessWidget {
                   height: 48,
                   decoration: BoxDecoration(
                     color: theme.colorScheme.primaryContainer.withOpacity(0.6),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
                     item.category.icon,
@@ -115,6 +119,15 @@ class RateCard extends StatelessWidget {
                               color: Colors.grey.shade600,
                             ),
                           ),
+                          const SizedBox(width: 6),
+                          const Text(
+                            '• 📈 گراف',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Color(0xFF0D7A57),
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -134,30 +147,50 @@ class RateCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: badgeColor.withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(badgeIcon, size: 13, color: badgeColor),
-                          const SizedBox(width: 2),
-                          Text(
-                            badgeText,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: badgeColor,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 7,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: badgeColor.withOpacity(0.12),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(badgeIcon, size: 12, color: badgeColor),
+                              const SizedBox(width: 2),
+                              Text(
+                                badgeText,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                  color: badgeColor,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (onCalculate != null) ...[
+                          const SizedBox(width: 6),
+                          InkWell(
+                            borderRadius: BorderRadius.circular(6),
+                            onTap: onCalculate,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.surfaceVariant,
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: const Icon(Icons.calculate_outlined, size: 16),
                             ),
                           ),
                         ],
-                      ),
+                      ],
                     ),
                   ],
                 ),

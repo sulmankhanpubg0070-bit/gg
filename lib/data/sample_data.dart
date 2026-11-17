@@ -12,7 +12,6 @@ class SampleData {
   ];
 
   static List<RateItem> getItems(String selectedCity) {
-    // City name clean
     final cityPrefix = selectedCity.split(' ').first;
 
     return [
@@ -27,6 +26,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'درجہ اول',
         city: cityPrefix,
+        history7Days: [150.0, 145.0, 142.0, 138.0, 140.0, 130.0, 120.0],
       ),
       RateItem(
         id: 'v2',
@@ -38,6 +38,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'درجہ اول',
         city: cityPrefix,
+        history7Days: [140.0, 140.0, 145.0, 148.0, 150.0, 155.0, 160.0],
       ),
       RateItem(
         id: 'v3',
@@ -49,6 +50,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'تازہ نیا آلو',
         city: cityPrefix,
+        history7Days: [90.0, 88.0, 85.0, 85.0, 85.0, 85.0, 85.0],
       ),
       RateItem(
         id: 'v4',
@@ -60,6 +62,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'چائنا امپورٹڈ',
         city: cityPrefix,
+        history7Days: [680.0, 670.0, 660.0, 650.0, 640.0, 630.0, 620.0],
       ),
       RateItem(
         id: 'v5',
@@ -71,28 +74,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'دیسی اول',
         city: cityPrefix,
-      ),
-      RateItem(
-        id: 'v6',
-        nameUrdu: 'سبز مرچ (Green Chili)',
-        nameEn: 'Green Chili',
-        category: RateCategory.vegetables,
-        currentPrice: 140.0,
-        previousPrice: 130.0,
-        unit: 'فی کلو (kg)',
-        grade: 'درجہ اول',
-        city: cityPrefix,
-      ),
-      RateItem(
-        id: 'v7',
-        nameUrdu: 'کھیرے (Cucumber)',
-        nameEn: 'Cucumber',
-        category: RateCategory.vegetables,
-        currentPrice: 90.0,
-        previousPrice: 95.0,
-        unit: 'فی کلو (kg)',
-        grade: 'فارمی تازہ',
-        city: cityPrefix,
+        history7Days: [440.0, 450.0, 450.0, 460.0, 460.0, 470.0, 480.0],
       ),
 
       // --- FRUITS ---
@@ -106,6 +88,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'پریمیم کوالٹی',
         city: cityPrefix,
+        history7Days: [250.0, 250.0, 260.0, 260.0, 270.0, 275.0, 280.0],
       ),
       RateItem(
         id: 'f2',
@@ -117,6 +100,7 @@ class SampleData {
         unit: 'فی درجن (dozen)',
         grade: 'درجہ اول',
         city: cityPrefix,
+        history7Days: [170.0, 165.0, 160.0, 160.0, 155.0, 150.0, 150.0],
       ),
       RateItem(
         id: 'f3',
@@ -128,23 +112,13 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'سپر کوالٹی',
         city: cityPrefix,
-      ),
-      RateItem(
-        id: 'f4',
-        nameUrdu: 'امرود (Guava)',
-        nameEn: 'Guava',
-        category: RateCategory.fruits,
-        currentPrice: 120.0,
-        previousPrice: 110.0,
-        unit: 'فی کلو (kg)',
-        grade: 'درجہ اول میٹھا',
-        city: cityPrefix,
+        history7Days: [480.0, 470.0, 460.0, 450.0, 440.0, 430.0, 420.0],
       ),
 
       // --- GROCERY ---
       RateItem(
         id: 'g1',
-        nameUrdu: 'آٹا (Wheat Flour)',
+        nameUrdu: 'آٹا چکی خالص (Flour)',
         nameEn: 'Flour (Chakki)',
         category: RateCategory.grocery,
         currentPrice: 130.0,
@@ -152,6 +126,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'چکی آٹا خالص',
         city: cityPrefix,
+        history7Days: [135.0, 132.0, 130.0, 130.0, 130.0, 130.0, 130.0],
       ),
       RateItem(
         id: 'g2',
@@ -163,6 +138,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'ریفائنڈ باریک',
         city: cityPrefix,
+        history7Days: [150.0, 148.0, 146.0, 145.0, 144.0, 143.0, 142.0],
       ),
       RateItem(
         id: 'g3',
@@ -174,6 +150,7 @@ class SampleData {
         unit: 'فی لیٹر (liter)',
         grade: 'درجہ اول برانڈڈ',
         city: cityPrefix,
+        history7Days: [480.0, 485.0, 485.0, 490.0, 490.0, 492.0, 495.0],
       ),
       RateItem(
         id: 'g4',
@@ -185,17 +162,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'صاف ستھری باریک',
         city: cityPrefix,
-      ),
-      RateItem(
-        id: 'g5',
-        nameUrdu: 'چاول باسمتی (Basmati Rice)',
-        nameEn: 'Super Basmati Rice',
-        category: RateCategory.grocery,
-        currentPrice: 320.0,
-        previousPrice: 310.0,
-        unit: 'فی کلو (kg)',
-        grade: 'کرنل سپر پرانا',
-        city: cityPrefix,
+        history7Days: [275.0, 275.0, 280.0, 280.0, 280.0, 280.0, 280.0],
       ),
 
       // --- MEAT & POULTRY ---
@@ -209,6 +176,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'فارمی برائلر',
         city: cityPrefix,
+        history7Days: [360.0, 365.0, 370.0, 375.0, 380.0, 390.0, 395.0],
       ),
       RateItem(
         id: 'm2',
@@ -220,6 +188,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'تازہ کٹا ہوا',
         city: cityPrefix,
+        history7Days: [520.0, 530.0, 540.0, 550.0, 560.0, 565.0, 575.0],
       ),
       RateItem(
         id: 'm3',
@@ -231,6 +200,7 @@ class SampleData {
         unit: 'فی درجن (dozen)',
         grade: 'فارمی تازہ',
         city: cityPrefix,
+        history7Days: [290.0, 295.0, 300.0, 300.0, 305.0, 308.0, 310.0],
       ),
       RateItem(
         id: 'm4',
@@ -242,17 +212,7 @@ class SampleData {
         unit: 'فی کلو (kg)',
         grade: 'بکرے کا گوشت',
         city: cityPrefix,
-      ),
-      RateItem(
-        id: 'm5',
-        nameUrdu: 'بڑا گوشت / بیف (Beef)',
-        nameEn: 'Beef (Boneless)',
-        category: RateCategory.meat,
-        currentPrice: 1100.0,
-        previousPrice: 1050.0,
-        unit: 'فی کلو (kg)',
-        grade: 'بچھیا کا گوشت',
-        city: cityPrefix,
+        history7Days: [2050.0, 2100.0, 2100.0, 2100.0, 2100.0, 2100.0, 2100.0],
       ),
 
       // --- GOLD & SILVER ---
@@ -266,6 +226,7 @@ class SampleData {
         unit: 'فی تولہ (Tola)',
         grade: 'خالص انٹرنیشنل ریٹ',
         city: 'Pakistan',
+        history7Days: [278000.0, 279500.0, 280000.0, 281000.0, 281200.0, 281800.0, 282500.0],
       ),
       RateItem(
         id: 'gold2',
@@ -277,17 +238,7 @@ class SampleData {
         unit: 'فی تولہ (Tola)',
         grade: 'زیورات کوالٹی',
         city: 'Pakistan',
-      ),
-      RateItem(
-        id: 'gold3',
-        nameUrdu: 'چاندی (Silver 24K)',
-        nameEn: 'Silver Fine',
-        category: RateCategory.gold,
-        currentPrice: 3350.0,
-        previousPrice: 3300.0,
-        unit: 'فی تولہ (Tola)',
-        grade: 'خالص چاندی',
-        city: 'Pakistan',
+        history7Days: [255000.0, 256000.0, 257000.0, 257500.0, 257760.0, 258200.0, 258950.0],
       ),
 
       // --- FUEL ---
@@ -301,6 +252,7 @@ class SampleData {
         unit: 'فی لیٹر (liter)',
         grade: 'سرکاری اوگرا ریٹ',
         city: 'Pakistan',
+        history7Days: [260.0, 258.0, 258.0, 256.0, 256.0, 255.0, 254.5],
       ),
       RateItem(
         id: 'fuel2',
@@ -312,17 +264,7 @@ class SampleData {
         unit: 'فی لیٹر (liter)',
         grade: 'سرکاری اوگرا ریٹ',
         city: 'Pakistan',
-      ),
-      RateItem(
-        id: 'fuel3',
-        nameUrdu: 'ایل پی جی (LPG Gas)',
-        nameEn: 'LPG Gas',
-        category: RateCategory.fuel,
-        currentPrice: 245.0,
-        previousPrice: 240.0,
-        unit: 'فی کلو (kg)',
-        grade: 'گھریلو سلنڈر',
-        city: 'Pakistan',
+        history7Days: [264.0, 262.0, 261.0, 260.1, 260.1, 259.0, 258.4],
       ),
 
       // --- CURRENCY ---
@@ -336,6 +278,7 @@ class SampleData {
         unit: '1 USD',
         grade: 'اوپن مارکیٹ',
         city: 'Pakistan',
+        history7Days: [277.5, 277.8, 278.0, 278.1, 278.2, 278.3, 278.45],
       ),
       RateItem(
         id: 'cur2',
@@ -347,39 +290,7 @@ class SampleData {
         unit: '1 SAR',
         grade: 'اوپن مارکیٹ',
         city: 'Pakistan',
-      ),
-      RateItem(
-        id: 'cur3',
-        nameUrdu: 'اماراتی درہم (UAE Dirham)',
-        nameEn: 'AED / PKR',
-        category: RateCategory.currency,
-        currentPrice: 75.85,
-        previousPrice: 75.80,
-        unit: '1 AED',
-        grade: 'اوپن مارکیٹ',
-        city: 'Pakistan',
-      ),
-      RateItem(
-        id: 'cur4',
-        nameUrdu: 'یورو (Euro)',
-        nameEn: 'EUR / PKR',
-        category: RateCategory.currency,
-        currentPrice: 298.50,
-        previousPrice: 297.80,
-        unit: '1 EUR',
-        grade: 'اوپن مارکیٹ',
-        city: 'Pakistan',
-      ),
-      RateItem(
-        id: 'cur5',
-        nameUrdu: 'برطانوی پاؤنڈ (British Pound)',
-        nameEn: 'GBP / PKR',
-        category: RateCategory.currency,
-        currentPrice: 355.20,
-        previousPrice: 354.00,
-        unit: '1 GBP',
-        grade: 'اوپن مارکیٹ',
-        city: 'Pakistan',
+        history7Days: [74.0, 74.1, 74.15, 74.2, 74.3, 74.28, 74.25],
       ),
     ];
   }

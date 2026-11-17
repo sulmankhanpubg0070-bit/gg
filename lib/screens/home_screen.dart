@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import '../models/rate_item.dart';
 import '../data/sample_data.dart';
 import '../widgets/rate_card.dart';
@@ -28,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _loadItems();
-    // Auto-check for OTA updates silently in the background
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _checkUpdateSilently();
     });
@@ -42,6 +42,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadItems() {
     _allItems = SampleData.getItems(_selectedCity);
+  }
+
+  void _shareDailyRatesOnWhatsApp() {
+    final today = DateFormat('d MMMM yyyy').format(DateTime.now());
+    final petrol = _allItems.firstWhere((i) => i.id == 'fuel1', orElse: () => _allItems.first);
+    final dollar = _allItems.firstWhere((i) => i.id == 'cur1', orElse: () => _allItems.first);
+    final gold = _allItems.firstWhere((i) => i.id == 'gold1', orElse: () => _allItems.first);
+    final chicken = _allItems.firstWhere((i) => i.id == 'm2', orElse: () => _allItems.first);
+    final tomato = _allItems.firstWhere((i) => i.id == 'v1', orElse: () => _allItems.first);
+    final flour = _allItems.firstWhere((i) => i.id == 'g1', orElse: () => _allItems.first);
+    final sugar = _allItems.firstWhere((i) => i.id == 'g2', orElse: () => _allItems.first);
+
+    final text = '''
+📢 *Rozana Rate (روزانہ ریٹ) - $today*
+📍 شہر: $_selectedCity
+
+⛽ *پٹرول:* Rs ${petrol.currentPrice} ${petrol.unit}
+💵 *امریکی ڈالر:* Rs ${dollar.currentPrice}
+🪙 *سونا 24K:* Rs ${gold.currentPrice.toStringAsFixed(0)} فی تولہ
+🍗 *مرغی گوشت:* Rs ${chicken.currentPrice} ${chicken.unit}
+🌾 *آٹا چکی:* Rs ${flour.currentPrice} ${flour.unit}
+🧂 *چینی:* Rs ${sugar.currentPrice} ${sugar.unit}
+🍅 *ٹماٹر:* Rs ${tomato.currentPrice} ${tomato.unit}
+
+📲 Rozana Rate ایپ ڈاؤنلوڈ کریں اور روزانہ ریٹس اپنے موبائل پر حاصل کریں!
+https://github.com/sulmankhanpubg0070-bit/gg/releases/latest
+''';
+
+    Share.share(text, subject: 'Rozana Rate Update - $today');
   }
 
   Future<void> _checkUpdateSilently() async {
@@ -144,6 +173,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         actions: [
+          // WhatsApp Share in Header
+          IconButton(
+            tooltip: 'واٹس ایپ پر ریٹس شیئر کریں',
+            icon: const Icon(Icons.share_rounded, color: Color(0xFF25D366)),
+            onPressed: _shareDailyRatesOnWhatsApp,
+          ),
+
           // City selector button
           PopupMenuButton<String>(
             tooltip: 'شہر منتخب کریں (Select City)',
@@ -247,6 +283,57 @@ class _HomeScreenState extends State<HomeScreen> {
       onRefresh: _refreshData,
       child: CustomScrollView(
         slivers: [
+          // WhatsApp Share Banner
+          SliverToBoxAdapter(
+            child: Container(
+              margin: const EdgeInsets.fromLTRB(16, 10, 16, 2),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                gradient: const LinearGradient(
+                  colors: [Color(0xFF25D366), Color(0xFF128C7E)],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF25D366).withOpacity(0.3),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.share_rounded, color: Colors.white, size: 22),
+                  const SizedBox(width: 10),
+                  const Expanded(
+                    child: Text(
+                      'آج کے ریٹس واٹس ایپ پر شیئر کریں',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: const Color(0xFF128C7E),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                      minimumSize: Size.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    onPressed: _shareDailyRatesOnWhatsApp,
+                    child: const Text('شیئر کریں', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11)),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           // Highlights Mini Cards
           SliverToBoxAdapter(
             child: SizedBox(
@@ -295,7 +382,7 @@ class _HomeScreenState extends State<HomeScreen> {
           // Search Bar
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+              padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
               child: TextField(
                 controller: _searchController,
                 decoration: InputDecoration(
@@ -372,19 +459,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '${_filteredItems.length} اشیاء کے سرکاری ریٹ',
+                    '${_filteredItems.length} اشیاء کے ریٹس • کلک کر کے گراف دیکھیں',
                     style: TextStyle(
-                      fontSize: 13,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold,
                       color: theme.colorScheme.onSurfaceVariant,
                     ),
                   ),
                   Text(
-                    'کلک کر کے حساب کریں',
+                    '📈 7-Day Trend',
                     style: TextStyle(
                       fontSize: 12,
                       color: theme.colorScheme.primary,
-                      fontWeight: FontWeight.w600,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],
@@ -419,7 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onCalculate: () {
                       setState(() {
                         _calculatorSelectedItem = item;
-                        _currentTabIndex = 1; // switch to Calculator tab!
+                        _currentTabIndex = 1;
                       });
                     },
                   );
@@ -525,10 +612,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 const SizedBox(height: 12),
+                _buildFeatureRow('📲 واٹس ایپ پر 1 کلک میں ریٹ لسٹ شیئرنگ'),
+                _buildFeatureRow('📈 ہر آئٹم کا پچھلے 7 دنوں کا قیمت کا گراف'),
                 _buildFeatureRow('🚀 In-App OTA Auto-Update سسٹم فعال ہے'),
                 _buildFeatureRow('🥦 روزانہ تازہ ترین منڈی اور اوگرا ریٹس'),
                 _buildFeatureRow('🧮 کُل قیمت معلوم کرنے کے لیے ان بلٹ کیلکولیٹر'),
-                _buildFeatureRow('📍 پاکستان کے تمام بڑے شہروں کی سپورٹ'),
               ],
             ),
           ),

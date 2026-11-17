@@ -1,7 +1,7 @@
 name: rozana_rate
-description: "Rozana Rate - Daily market prices with built-in OTA Auto Updater."
+description: "Rozana Rate - Daily market prices with built-in OTA Auto Updater, WhatsApp Share, and 7-Day Trend Charts."
 publish_to: 'none'
-version: 1.0.1+2
+version: 1.0.2+3
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -13,6 +13,7 @@ dependencies:
   http: ^1.2.1
   path_provider: ^2.1.3
   open_filex: ^4.5.0
+  share_plus: ^9.0.0
 
 dev_dependencies:
   flutter_test:
