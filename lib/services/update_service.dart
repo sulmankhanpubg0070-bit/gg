@@ -20,7 +20,7 @@ class UpdateInfo {
 
 class UpdateService {
   // Current app version installed
-  static const String currentVersion = '1.0.4';
+  static const String currentVersion = '1.0.5';
 
   // GitHub repository details
   static const String githubRepo = 'sulmankhanpubg0070-bit/gg';
