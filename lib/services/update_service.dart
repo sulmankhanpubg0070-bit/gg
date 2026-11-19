@@ -20,58 +20,86 @@ class UpdateInfo {
 
 class UpdateService {
   // Current app version installed
-  static const String currentVersion = '1.0.3';
+  static const String currentVersion = '1.0.4';
 
   // GitHub repository details
   static const String githubRepo = 'sulmankhanpubg0070-bit/gg';
 
-  /// Checks GitHub Releases API for any newer version
+  /// Checks for newer version using dual strategy:
+  /// 1. GitHub REST API (full metadata)
+  /// 2. Direct Web Redirect fallback (100% immune to API rate limits & 403 blocks)
   static Future<UpdateInfo?> checkForUpdate() async {
+    // Strategy 1: GitHub REST API
     try {
       final url = Uri.parse('https://api.github.com/repos/$githubRepo/releases/latest');
       final response = await http.get(url, headers: {
         'Accept': 'application/vnd.github.v3+json',
-      }).timeout(const Duration(seconds: 8));
+        'User-Agent': 'RozanaRateApp-Android',
+      }).timeout(const Duration(seconds: 12));
 
-      if (response.statusCode != 200) {
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        final rawTag = (data['tag_name'] as String? ?? '').replaceAll('v', '').trim();
+        final notes = data['body'] as String? ?? 'نئے فیچرز اور بہتری شامل کی گئی ہے۔';
+        
+        final assets = data['assets'] as List<dynamic>? ?? [];
+        String downloadUrl = '';
+        int apkSize = 0;
+
+        for (var asset in assets) {
+          final name = asset['name'] as String? ?? '';
+          if (name.endsWith('.apk')) {
+            downloadUrl = asset['browser_download_url'] as String? ?? '';
+            apkSize = asset['size'] as int? ?? 0;
+            break;
+          }
+        }
+
+        if (downloadUrl.isEmpty) {
+          downloadUrl = 'https://github.com/$githubRepo/releases/latest/download/RozanaRate.apk';
+        }
+
+        if (_isNewerVersion(rawTag, currentVersion)) {
+          return UpdateInfo(
+            latestVersion: rawTag,
+            releaseNotes: notes,
+            apkDownloadUrl: downloadUrl,
+            apkSizeBytes: apkSize,
+          );
+        }
         return null;
       }
+    } catch (_) {
+      // API error, timeout or rate-limited; fall through to Strategy 2
+    }
 
-      final data = jsonDecode(response.body);
-      final rawTag = (data['tag_name'] as String? ?? '').replaceAll('v', '').trim();
-      final notes = data['body'] as String? ?? 'Naye features aur behtariyan shamil ki gayi hain.';
-      
-      final assets = data['assets'] as List<dynamic>? ?? [];
-      String downloadUrl = '';
-      int apkSize = 0;
+    // Strategy 2 (Fallback): Direct Web Redirect (Zero Rate Limits, Never 403)
+    try {
+      final client = http.Client();
+      final request = http.Request('HEAD', Uri.parse('https://github.com/$githubRepo/releases/latest'))
+        ..followRedirects = false
+        ..headers['User-Agent'] = 'Mozilla/5.0 (Linux; Android 10)';
 
-      for (var asset in assets) {
-        final name = asset['name'] as String? ?? '';
-        if (name.endsWith('.apk')) {
-          downloadUrl = asset['browser_download_url'] as String? ?? '';
-          apkSize = asset['size'] as int? ?? 0;
-          break;
+      final streamedResponse = await client.send(request).timeout(const Duration(seconds: 12));
+      final location = streamedResponse.headers['location'] ?? '';
+      client.close();
+
+      if (location.contains('/tag/')) {
+        final tag = location.split('/tag/').last.replaceAll('v', '').trim();
+        if (_isNewerVersion(tag, currentVersion)) {
+          return UpdateInfo(
+            latestVersion: tag,
+            releaseNotes: 'نیا ورژن v$tag دستیاب ہے جس میں نئی قیمتیں، فیچرز اور بہتری شامل کی گئی ہے۔',
+            apkDownloadUrl: 'https://github.com/$githubRepo/releases/download/v$tag/RozanaRate.apk',
+            apkSizeBytes: 0,
+          );
         }
       }
-
-      if (downloadUrl.isEmpty) {
-        downloadUrl = 'https://github.com/$githubRepo/releases/latest/download/RozanaRate.apk';
-      }
-
-      // Compare versions
-      if (_isNewerVersion(rawTag, currentVersion)) {
-        return UpdateInfo(
-          latestVersion: rawTag,
-          releaseNotes: notes,
-          apkDownloadUrl: downloadUrl,
-          apkSizeBytes: apkSize,
-        );
-      }
-
-      return null;
     } catch (_) {
-      return null;
+      // Both attempts failed
     }
+
+    return null;
   }
 
   /// Downloads the APK and directly triggers Android's Package Installer
