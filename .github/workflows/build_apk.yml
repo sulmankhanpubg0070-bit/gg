@@ -51,13 +51,19 @@ jobs:
           name: RozanaRate-APK-Release
           path: RozanaRate.apk
 
+      - name: Extract App Version
+        id: app_version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | head -n1 | cut -d':' -f2 | tr -d ' ' | cut -d'+' -f1)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Publish GitHub Release (Direct APK Link)
         uses: softprops/action-gh-release@v2
         if: github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.2
-          name: "Rozana Rate v1.0.2"
-          body: "نیا اپڈیٹ v1.0.2: واٹس ایپ پر 1 کلک میں ریٹس شیئرنگ اور ہر آئٹم کا پچھلے 7 دنوں کا قیمت کا گراف شامل کر دیا گیا ہے۔"
+          tag_name: v${{ steps.app_version.outputs.version }}
+          name: "Rozana Rate v${{ steps.app_version.outputs.version }}"
+          body: "نیا ورژن v${{ steps.app_version.outputs.version }}: ایپ کی رفتار، کارکردگی اور OTA آٹو اپڈیٹ سسٹم میں مزید بہتری شامل کی گئی ہے۔"
           files: RozanaRate.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
