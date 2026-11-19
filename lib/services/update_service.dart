@@ -20,7 +20,7 @@ class UpdateInfo {
 
 class UpdateService {
   // Current app version installed
-  static const String currentVersion = '1.0.7';
+  static const String currentVersion = '1.0.8';
 
   // GitHub repository details
   static const String githubRepo = 'sulmankhanpubg0070-bit/gg';
@@ -102,9 +102,15 @@ class UpdateService {
     return null;
   }
 
-  /// Downloads the APK and directly triggers Android's Package Installer
-  static Future<void> downloadAndInstallApk({
+  // Cached APK path — survives dialog dismiss/reopen in same session
+  static String? cachedApkPath;
+  static String? cachedApkVersion;
+
+  /// Downloads the APK file and returns the saved file path.
+  /// Does NOT trigger the installer — that is handled by the dialog's Install button.
+  static Future<String> downloadApk({
     required String downloadUrl,
+    required String version,
     required Function(double progress, String progressText) onProgress,
   }) async {
     final client = http.Client();
@@ -115,7 +121,8 @@ class UpdateService {
     int receivedBytes = 0;
 
     final tempDir = await getTemporaryDirectory();
-    final apkFile = File('${tempDir.path}/RozanaRate.apk');
+    final apkFile = File('${tempDir.path}/RozanaRate_$version.apk');
+    // Always re-download fresh copy
     if (await apkFile.exists()) {
       await apkFile.delete();
     }
@@ -136,7 +143,7 @@ class UpdateService {
         text = '$receivedMb MB / $totalMb MB (${(progress * 100).toInt()}%)';
       } else {
         final receivedMb = (receivedBytes / (1024 * 1024)).toStringAsFixed(1);
-        text = '$receivedMb MB downloaded';
+        text = '$receivedMb MB ڈاؤنلوڈ ہوا';
       }
 
       onProgress(progress, text);
@@ -145,11 +152,37 @@ class UpdateService {
     await sink.close();
     client.close();
 
-    // Trigger Android Native Package Installer
+    // Cache for future use in this session
+    cachedApkPath = apkFile.path;
+    cachedApkVersion = version;
+
+    return apkFile.path;
+  }
+
+  /// Triggers Android Package Installer for a given APK file path.
+  static Future<void> installApk(String apkPath) async {
     await OpenFilex.open(
-      apkFile.path,
+      apkPath,
       type: 'application/vnd.android.package-archive',
     );
+  }
+
+  /// Check if APK for a specific version is already cached/downloaded
+  static Future<String?> getCachedApkPath(String version) async {
+    // Check in-memory cache first
+    if (cachedApkPath != null && cachedApkVersion == version) {
+      final file = File(cachedApkPath!);
+      if (await file.exists()) return cachedApkPath;
+    }
+    // Check on disk (survives hot-restart)
+    final tempDir = await getTemporaryDirectory();
+    final apkFile = File('${tempDir.path}/RozanaRate_$version.apk');
+    if (await apkFile.exists()) {
+      cachedApkPath = apkFile.path;
+      cachedApkVersion = version;
+      return apkFile.path;
+    }
+    return null;
   }
 
   static bool _isNewerVersion(String latest, String current) {

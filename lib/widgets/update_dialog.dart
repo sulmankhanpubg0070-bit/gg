@@ -12,19 +12,40 @@ class UpdateDialog extends StatefulWidget {
 
 class _UpdateDialogState extends State<UpdateDialog> {
   bool _isDownloading = false;
+  bool _isDownloadComplete = false;
+  String? _downloadedApkPath;
   double _progress = 0.0;
   String _progressText = '0%';
   String? _errorMessage;
 
+  @override
+  void initState() {
+    super.initState();
+    // Check if APK already downloaded for this version
+    _checkCachedApk();
+  }
+
+  Future<void> _checkCachedApk() async {
+    final cached = await UpdateService.getCachedApkPath(widget.updateInfo.latestVersion);
+    if (cached != null && mounted) {
+      setState(() {
+        _isDownloadComplete = true;
+        _downloadedApkPath = cached;
+      });
+    }
+  }
+
   Future<void> _startDownload() async {
     setState(() {
       _isDownloading = true;
+      _isDownloadComplete = false;
       _errorMessage = null;
     });
 
     try {
-      await UpdateService.downloadAndInstallApk(
+      final apkPath = await UpdateService.downloadApk(
         downloadUrl: widget.updateInfo.apkDownloadUrl,
+        version: widget.updateInfo.latestVersion,
         onProgress: (progress, text) {
           if (mounted) {
             setState(() {
@@ -35,7 +56,11 @@ class _UpdateDialogState extends State<UpdateDialog> {
         },
       );
       if (mounted) {
-        Navigator.pop(context);
+        setState(() {
+          _isDownloading = false;
+          _isDownloadComplete = true;
+          _downloadedApkPath = apkPath;
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -44,6 +69,12 @@ class _UpdateDialogState extends State<UpdateDialog> {
           _errorMessage = 'ڈاؤنلوڈ میں مسئلہ آیا، دوبارہ کوشش کریں۔';
         });
       }
+    }
+  }
+
+  Future<void> _installApk() async {
+    if (_downloadedApkPath != null) {
+      await UpdateService.installApk(_downloadedApkPath!);
     }
   }
 
@@ -131,17 +162,20 @@ class _UpdateDialogState extends State<UpdateDialog> {
         ),
       ),
       actions: [
-        if (!_isDownloading) ...[
+        if (_isDownloadComplete) ...[
+          // APK downloaded — show Install button
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('بعد میں (Later)'),
+            child: const Text('بعد میں'),
           ),
           FilledButton.icon(
-            icon: const Icon(Icons.download_rounded, size: 18),
-            label: const Text('ابھی اپڈیٹ کریں'),
-            onPressed: _startDownload,
+            icon: const Icon(Icons.install_mobile_rounded, size: 18),
+            label: const Text('ابھی انسٹال کریں'),
+            style: FilledButton.styleFrom(backgroundColor: Colors.green),
+            onPressed: _installApk,
           ),
-        ] else ...[
+        ] else if (_isDownloading) ...[
+          // Downloading in progress
           const Center(
             child: Padding(
               padding: EdgeInsets.symmetric(vertical: 8),
@@ -150,6 +184,17 @@ class _UpdateDialogState extends State<UpdateDialog> {
                 style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
               ),
             ),
+          ),
+        ] else ...[
+          // Not downloaded yet
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('بعد میں (Later)'),
+          ),
+          FilledButton.icon(
+            icon: const Icon(Icons.download_rounded, size: 18),
+            label: const Text('ابھی اپڈیٹ کریں'),
+            onPressed: _startDownload,
           ),
         ],
       ],

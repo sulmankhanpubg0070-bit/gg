@@ -38,3 +38,7 @@ migrate_working_dir/
 **/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+
+# Release Keystore - DO NOT COMMIT
+android/app/release.jks
+release_jks_base64.txt
